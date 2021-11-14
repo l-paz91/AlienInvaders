@@ -6,6 +6,7 @@
 //--INCLUDES--//
 #include <SFML/Graphics/Texture.hpp>
 
+#include <iostream>
 #include <map>
 #include <string>
 
@@ -13,11 +14,11 @@ using namespace sf;
 
 // -----------------------------------------------------------------------------
 
-class TextureHolder
+class TextureManager
 {
 public:
-	TextureHolder(const TextureHolder&) = delete;
-	void operator=(const TextureHolder&) = delete;
+	TextureManager(const TextureManager&) = delete;
+	void operator=(const TextureManager&) = delete;
 
 	static Texture& getTexture(const std::string& filename)
 	{
@@ -30,17 +31,20 @@ public:
 		else
 		{
 			Texture& t = ref[filename];
-			t.loadFromFile(filename);
+			if (!t.loadFromFile(filename))
+			{
+				std::cout << "Error loading: " << filename << std::endl;
+			}
 			return t;
 		}
 	}
 
 private:
-	TextureHolder() {}
+	TextureManager() {}
 
-	static TextureHolder& getInstance()
+	static TextureManager& getInstance()
 	{
-		static TextureHolder instance;	// guaranteed to be destroyed properly
+		static TextureManager instance;	// guaranteed to be destroyed properly
 		return instance;
 	}
 

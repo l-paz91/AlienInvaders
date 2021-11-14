@@ -3,17 +3,10 @@
 //--INCLUDES--//
 #include <SFML/Graphics.hpp>
 
+#include "GameConstants.h"
+#include "Player.h"
+
 #include "std_lib_facilities.h"
-
-constexpr int WIDTH = 672;
-constexpr int HEIGHT = 768;
-constexpr int HALFW = WIDTH/2;
-constexpr int HALFH = HEIGHT/2;
-constexpr float TOP_BANNER = 96;
-constexpr float BOT_BANNER = 51;
-constexpr float LEFT_EDGE = 30;
-constexpr float RIGHT_EDGE = WIDTH - LEFT_EDGE;
-
 // -----------------------------------------------------------------------------
 
 int main()
@@ -21,58 +14,39 @@ int main()
 	using namespace sf;
 
 	// create the main window
-	RenderWindow window(VideoMode(672, 768), "Alien Invaders Window");
+	RenderWindow window(VideoMode(GameGlobals::WIDTH, GameGlobals::HEIGHT), "Alien Invaders Window");
 
-	// load a sprite to display
-	Texture playerTexture;
-	if (!playerTexture.loadFromFile("Graphics/PlayerSprite.png"))
-		return EXIT_FAILURE;
+	// Create Player
+	Player player;
 
-	Sprite playerSprite(playerTexture);
-	playerSprite.setOrigin(20, 0);
-	playerSprite.setPosition(HALFW, HEIGHT - BOT_BANNER);
-
-	int playerSpeed = 300;
-
+	// clock for timing
 	Clock clock;
 
 	// start the game loop
 	while (window.isOpen())
 	{
+		// Handle Timing
+		Time dt = clock.restart();
+
 		// process events
 		Event event;
 		while (window.pollEvent(event))
 		{
 			// close the window: exit
-			if (event.type == Event::Closed)
+			if (event.type == Event::Closed || event.key.code == Keyboard::Escape)
 			{
 				window.close();
 			}
-		}
 
-		// Handle Timing
-		Time dt = clock.restart();
-
-		// use left and right arrow to move player
-		if (event.key.code == Keyboard::Left)
-		{
-			playerSprite.setPosition(
-				playerSprite.getPosition().x - (playerSpeed * dt.asSeconds()), 
-				playerSprite.getPosition().y);
+			// update player input
+			player.updateInput(event);
 		}
-		if (event.key.code == Keyboard::Right)
-		{
-			playerSprite.setPosition(
-				playerSprite.getPosition().x + (playerSpeed * dt.asSeconds()),
-				playerSprite.getPosition().y);
-		}
-
 
 		// clear the screen
 		window.clear();
 
 		// draw sprites
-		window.draw(playerSprite);
+		player.render(window);
 
 		// draw text
 
