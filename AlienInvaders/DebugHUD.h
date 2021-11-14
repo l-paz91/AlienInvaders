@@ -1,42 +1,35 @@
 // -----------------------------------------------------------------------------
-#ifndef Player_H
-#define Player_H
+#ifndef DebugHUD_H
+#define DebugHUD_H
 // -----------------------------------------------------------------------------
-
-/*
-* 
-*	In the original Space Invaders a player is 13x8 pixels. 
-*	Everything in this game is scaled by 3. This player is 39x24 pixels.
-*	Origin is set in the top middle at (20, 0)
-* 
-*/
 
 //--INCLUDES--//
 
-
 // Forward Declares
-class sf::Event;
+class sf::Font;
 class sf::RenderWindow;
-class sf::Sprite;
+class sf::Text;
+class sf::View;
 
 // -----------------------------------------------------------------------------
 
-class Player
+class DebugHUD
 {
 public:
-	Player();
-	~Player();
+	DebugHUD();
+	~DebugHUD();
 
-	void update(const float& pDt);				// update logic
-	void render(sf::RenderWindow& pWindow);		// render the sprite to the window
-
-	const sf::Sprite& getSprite() const { return *mSprite; }
+	void update(std::stringstream& pSS);
+	void render(sf::RenderWindow& pWindow);
 
 private:
-	sf::Sprite* mSprite;
+	sf::View* mView;
+
+	sf::Font* mFont;
+	sf::Text* mText;
 };
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-#endif // !Player_H
+#endif // !DebugHUD_H

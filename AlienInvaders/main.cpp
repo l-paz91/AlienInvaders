@@ -2,7 +2,9 @@
 
 //--INCLUDES--//
 #include <SFML/Graphics.hpp>
+#include <sstream>
 
+#include "DebugHUD.h"
 #include "GameConstants.h"
 #include "Player.h"
 
@@ -21,6 +23,9 @@ int main()
 
 	// Create Player
 	Player player;
+
+	// Create HUDs
+	DebugHUD debugHUD;
 
 	// clock for timing
 	Clock clock;
@@ -49,13 +54,15 @@ int main()
 		// ---- UPDATE OBJECTS ----------------------------------------------------- //
 		player.update(dt.asSeconds());
 
+		// ---- UPDATE HUD --------------------------------------------------------- //
+		//debugHUD.update(ss);
 
 		// ---- RENDER OBJECTS ----------------------------------------------------- //
 		player.render(window);
 
 
 		// ---- RENDER HUD --------------------------------------------------------- //
-
+		debugHUD.render(window);
 
 
 		// ---- DISPLAY WINDOW ----------------------------------------------------- //
