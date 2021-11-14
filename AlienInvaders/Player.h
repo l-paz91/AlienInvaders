@@ -27,14 +27,11 @@ public:
 	Player();
 	~Player();
 
-	void updateInput(sf::Event& pEvent);		// update logic related to input
-	void update();							// update logic
+	void update(const float& pDt);				// update logic
 	void render(sf::RenderWindow& pWindow);		// render the sprite to the window
 
 private:
 	sf::Sprite* mSprite;
-
-	float mSpeed;
 };
 
 // -----------------------------------------------------------------------------

@@ -5,14 +5,15 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/System/Time.hpp>
 
 #include "GameConstants.h"
 #include "TextureManager.h"
 
 // -----------------------------------------------------------------------------
 
-#include "Player.h"
 #include "std_lib_facilities.h"
+#include "Player.h"
 
 using namespace sf;
 
@@ -23,6 +24,11 @@ namespace
 	namespace PlayerPrivate
 	{
 		const string playerTextureFilename = "Graphics/PlayerSprite.png";
+		
+		// In SI, the player moves a pixel every screen refresh, so 60 times a second
+		// therefore our player needs to move 3 pixels every second
+		// the players speed never changes
+		constexpr float PLAYER_SPEED = 180;
 	}
 }
 
@@ -31,7 +37,6 @@ namespace
 
 Player::Player()
 	: mSprite(new Sprite(TextureManager::getTexture(PlayerPrivate::playerTextureFilename)))
-	, mSpeed(3)
 {
 	using namespace GameGlobals;
 
@@ -51,24 +56,19 @@ Player::~Player()
 
 // -----------------------------------------------------------------------------
 
-void Player::updateInput(Event& pEvent)
+void Player::update(const float& pDt)
 {
-	// use left and right arrow to move player
-	if (pEvent.key.code == Keyboard::Left)
+	using namespace PlayerPrivate;
+
+	// ---- HANDLE INPUT ---- //
+	if (Keyboard::isKeyPressed(Keyboard::Left))
 	{
-		mSprite->move(-mSpeed, 0);
+		mSprite->move(-PLAYER_SPEED * pDt, 0);
 	}
-	if (pEvent.key.code == Keyboard::Right)
+	if (Keyboard::isKeyPressed(Keyboard::Right))
 	{
-		mSprite->move(mSpeed, 0);
+		mSprite->move(PLAYER_SPEED * pDt, 0);
 	}
-}
-
-// -----------------------------------------------------------------------------
-
-void Player::update()
-{
-
 }
 
 // -----------------------------------------------------------------------------

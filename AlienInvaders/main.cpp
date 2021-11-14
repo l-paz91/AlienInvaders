@@ -15,6 +15,9 @@ int main()
 
 	// create the main window
 	RenderWindow window(VideoMode(GameGlobals::WIDTH, GameGlobals::HEIGHT), "Alien Invaders Window");
+	
+	// set framerate - Original Space Invaders ran at 60Hz so we want to try and mimic that
+	window.setFramerateLimit(60);
 
 	// Create Player
 	Player player;
@@ -28,7 +31,7 @@ int main()
 		// Handle Timing
 		Time dt = clock.restart();
 
-		// process events
+		// ---- PROCESS EVENTS ----------------------------------------------------- //
 		Event event;
 		while (window.pollEvent(event))
 		{
@@ -37,20 +40,25 @@ int main()
 			{
 				window.close();
 			}
-
-			// update player input
-			player.updateInput(event);
 		}
 
-		// clear the screen
+		// ---- CLEAR SCREEN ------------------------------------------------------- //
 		window.clear();
 
-		// draw sprites
+
+		// ---- UPDATE OBJECTS ----------------------------------------------------- //
+		player.update(dt.asSeconds());
+
+
+		// ---- RENDER OBJECTS ----------------------------------------------------- //
 		player.render(window);
 
-		// draw text
 
-		// update the window
+		// ---- RENDER HUD --------------------------------------------------------- //
+
+
+
+		// ---- DISPLAY WINDOW ----------------------------------------------------- //
 		window.display();
 	}
 
