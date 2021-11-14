@@ -12,12 +12,10 @@
 */
 
 //--INCLUDES--//
-
+#include <SFML/Graphics.hpp>
 
 // Forward Declares
-class sf::Event;
-class sf::RenderWindow;
-class sf::Sprite;
+
 
 // -----------------------------------------------------------------------------
 
@@ -25,15 +23,14 @@ class Player
 {
 public:
 	Player();
-	~Player();
 
 	void update(const float& pDt);				// update logic
 	void render(sf::RenderWindow& pWindow);		// render the sprite to the window
 
-	const sf::Sprite& getSprite() const { return *mSprite; }
+	const sf::Sprite& getSprite() const { return mSprite; }
 
 private:
-	sf::Sprite* mSprite;
+	sf::Sprite mSprite;
 };
 
 // -----------------------------------------------------------------------------

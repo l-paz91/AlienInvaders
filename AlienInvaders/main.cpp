@@ -1,12 +1,10 @@
 // -----------------------------------------------------------------------------
 
 //--INCLUDES--//
-#include <SFML/Graphics.hpp>
 #include <sstream>
 
-#include "DebugHUD.h"
 #include "GameConstants.h"
-#include "Player.h"
+#include "GameManager.h"
 
 #include "std_lib_facilities.h"
 // -----------------------------------------------------------------------------
@@ -21,11 +19,8 @@ int main()
 	// set framerate - Original Space Invaders ran at 60Hz so we want to try and mimic that
 	window.setFramerateLimit(60);
 
-	// Create Player
-	Player player;
-
-	// Create HUDs
-	DebugHUD debugHUD;
+	// Create the Game Manager
+	GameManager gameManager;
 
 	// clock for timing
 	Clock clock;
@@ -50,20 +45,17 @@ int main()
 		// ---- CLEAR SCREEN ------------------------------------------------------- //
 		window.clear();
 
-
 		// ---- UPDATE OBJECTS ----------------------------------------------------- //
-		player.update(dt.asSeconds());
+		gameManager.updateObjects(dt.asSeconds());
 
 		// ---- UPDATE HUD --------------------------------------------------------- //
-		//debugHUD.update(ss);
+		gameManager.updateHUDs();
 
 		// ---- RENDER OBJECTS ----------------------------------------------------- //
-		player.render(window);
-
+		gameManager.renderObjects(window);
 
 		// ---- RENDER HUD --------------------------------------------------------- //
-		debugHUD.render(window);
-
+		gameManager.renderHUDs(window);
 
 		// ---- DISPLAY WINDOW ----------------------------------------------------- //
 		window.display();

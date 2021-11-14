@@ -1,20 +1,14 @@
 // -----------------------------------------------------------------------------
 
 //--INCLUDES--//
-#include <SFML/Window/Event.hpp>
-#include <SFML/Window/Keyboard.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/System/Time.hpp>
-
 #include "GameConstants.h"
 #include "TextureManager.h"
 
 // -----------------------------------------------------------------------------
 
-#include "std_lib_facilities.h"
 #include "Player.h"
 
+#include "std_lib_facilities.h"
 using namespace sf;
 
 // -----------------------------------------------------------------------------
@@ -36,22 +30,12 @@ namespace
 // -----------------------------------------------------------------------------
 
 Player::Player()
-	: mSprite(new Sprite(TextureManager::getTexture(PlayerPrivate::playerTextureFilename)))
+	: mSprite(Sprite(TextureManager::getTexture(PlayerPrivate::playerTextureFilename)))
 {
 	using namespace GameConstants;
 
-	mSprite->setOrigin(20, 0);
-	mSprite->setPosition(HALFW, HEIGHT - BOT_BANNER);
-}
-
-// -----------------------------------------------------------------------------
-
-Player::~Player()
-{
-	if (mSprite)
-	{
-		delete mSprite;
-	}
+	mSprite.setOrigin(20, 0);
+	mSprite.setPosition(HALFW, HEIGHT - BOT_BANNER);
 }
 
 // -----------------------------------------------------------------------------
@@ -61,21 +45,21 @@ void Player::update(const float& pDt)
 	using namespace PlayerPrivate;
 	using namespace GameConstants;
 
-	const Vector2f& pos = mSprite->getPosition();
+	const Vector2f& pos = mSprite.getPosition();
 
 	// ---- HANDLE INPUT ---- //
 	if (Keyboard::isKeyPressed(Keyboard::Left))
 	{
 		if (!(pos.x <= LEFT_EDGE))
 		{
-			mSprite->move(-PLAYER_SPEED * pDt, 0);
+			mSprite.move(-PLAYER_SPEED * pDt, 0);
 		}
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Right))
 	{
 		if (!(pos.x >= RIGHT_EDGE))
 		{
-			mSprite->move(PLAYER_SPEED * pDt, 0);
+			mSprite.move(PLAYER_SPEED * pDt, 0);
 		}
 	}
 }
@@ -84,7 +68,7 @@ void Player::update(const float& pDt)
 
 void Player::render(RenderWindow& pWindow)
 {
-	pWindow.draw(*mSprite);
+	pWindow.draw(mSprite);
 }
 
 // -----------------------------------------------------------------------------

@@ -1,31 +1,45 @@
 // -----------------------------------------------------------------------------
-#ifndef DebugHUD_H
-#define DebugHUD_H
+#ifndef GameManager_H
+#define GameManager_H
 // -----------------------------------------------------------------------------
 
 //--INCLUDES--//
 #include <SFML/Graphics.hpp>
 
 // Forward Declares
+class Player;
+class DebugHUD;
 
 // -----------------------------------------------------------------------------
 
-class DebugHUD
+enum class Gamestate
+{
+	eTITLE, ePLAYING, eGAMEOVER
+};
+
+// -----------------------------------------------------------------------------
+
+class GameManager
 {
 public:
-	DebugHUD();
+	GameManager();
+	~GameManager();
 
-	void update(std::stringstream& pSS);
-	void render(sf::RenderWindow& pWindow);
+	void updateObjects(const float& pDeltaTime);
+	void updateHUDs();
+
+	void renderObjects(sf::RenderWindow& pWindow);
+	void renderHUDs(sf::RenderWindow& pWindow);
 
 private:
-	sf::View mView;
+	Player* mPlayer;
 
-	sf::Font mFont;
-	sf::Text mText;
+	DebugHUD* mDebugHUD;
+
+	Gamestate mGamestate;
 };
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-#endif // !DebugHUD_H
+#endif // !GameManager_H
