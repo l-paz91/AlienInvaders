@@ -16,7 +16,7 @@
 
 // -----------------------------------------------------------------------------
 
-namespace GameGlobals
+namespace GameConstants
 {
 	constexpr int WIDTH = 672;
 	constexpr int HEIGHT = 768;

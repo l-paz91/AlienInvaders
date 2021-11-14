@@ -26,7 +26,7 @@ namespace
 		const string playerTextureFilename = "Graphics/PlayerSprite.png";
 		
 		// In SI, the player moves a pixel every screen refresh, so 60 times a second
-		// therefore our player needs to move 3 pixels every second
+		// therefore our player needs to move 3 pixels every second (as the width is 3x larger)
 		// the players speed never changes
 		constexpr float PLAYER_SPEED = 180;
 	}
@@ -38,7 +38,7 @@ namespace
 Player::Player()
 	: mSprite(new Sprite(TextureManager::getTexture(PlayerPrivate::playerTextureFilename)))
 {
-	using namespace GameGlobals;
+	using namespace GameConstants;
 
 	mSprite->setOrigin(20, 0);
 	mSprite->setPosition(HALFW, HEIGHT - BOT_BANNER);
@@ -59,7 +59,7 @@ Player::~Player()
 void Player::update(const float& pDt)
 {
 	using namespace PlayerPrivate;
-	using namespace GameGlobals;
+	using namespace GameConstants;
 
 	const Vector2f& pos = mSprite->getPosition();
 

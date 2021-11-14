@@ -14,7 +14,7 @@ int main()
 	using namespace sf;
 
 	// create the main window
-	RenderWindow window(VideoMode(GameGlobals::WIDTH, GameGlobals::HEIGHT), "Alien Invaders Window");
+	RenderWindow window(VideoMode(GameConstants::WIDTH, GameConstants::HEIGHT), "Alien Invaders Window");
 	
 	// set framerate - Original Space Invaders ran at 60Hz so we want to try and mimic that
 	window.setFramerateLimit(60);
