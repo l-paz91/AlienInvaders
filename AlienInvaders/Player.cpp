@@ -59,15 +59,24 @@ Player::~Player()
 void Player::update(const float& pDt)
 {
 	using namespace PlayerPrivate;
+	using namespace GameGlobals;
+
+	const Vector2f& pos = mSprite->getPosition();
 
 	// ---- HANDLE INPUT ---- //
 	if (Keyboard::isKeyPressed(Keyboard::Left))
 	{
-		mSprite->move(-PLAYER_SPEED * pDt, 0);
+		if (!(pos.x <= LEFT_EDGE))
+		{
+			mSprite->move(-PLAYER_SPEED * pDt, 0);
+		}
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Right))
 	{
-		mSprite->move(PLAYER_SPEED * pDt, 0);
+		if (!(pos.x >= RIGHT_EDGE))
+		{
+			mSprite->move(PLAYER_SPEED * pDt, 0);
+		}
 	}
 }
 
