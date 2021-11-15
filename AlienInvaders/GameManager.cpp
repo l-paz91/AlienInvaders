@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "DebugHUD.h"
+#include "HUD.h"
 #include "Player.h"
 
 #include "GameManager.h"
@@ -13,6 +14,7 @@
 
 GameManager::GameManager()
 	: mPlayer(new Player())
+	, mHUD(new HUD())
 	, mDebugHUD(new DebugHUD())
 	, mGamestate(Gamestate::eTITLE)
 {
@@ -24,6 +26,7 @@ GameManager::GameManager()
 GameManager::~GameManager()
 {
 	delete mPlayer;
+	delete mHUD;
 	delete mDebugHUD;
 }
 
@@ -57,6 +60,8 @@ void GameManager::updateObjects(const float& pDeltaTime)
 
 void GameManager::updateHUDs()
 {
+	mHUD->update();
+
 	switch (mGamestate)
 	{
 	case Gamestate::eTITLE:
@@ -110,6 +115,8 @@ void GameManager::renderObjects(sf::RenderWindow& pWindow)
 
 void GameManager::renderHUDs(sf::RenderWindow& pWindow)
 {
+	mHUD->render(pWindow);
+
 	switch (mGamestate)
 	{
 	case Gamestate::eTITLE:

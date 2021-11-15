@@ -1,47 +1,46 @@
 // -----------------------------------------------------------------------------
-#ifndef GameManager_H
-#define GameManager_H
+#ifndef HUD_H
+#define HUD_H
 // -----------------------------------------------------------------------------
 
 //--INCLUDES--//
 #include <SFML/Graphics.hpp>
 
 // Forward Declares
-class Player;
-class DebugHUD;
-class HUD;
 
 // -----------------------------------------------------------------------------
 
-enum class Gamestate
-{
-	eTITLE, ePLAYING, eGAMEOVER
-};
-
-// -----------------------------------------------------------------------------
-
-class GameManager
+class HUD
 {
 public:
-	GameManager();
-	~GameManager();
+	HUD();
 
-	void updateObjects(const float& pDeltaTime);
-	void updateHUDs();
-
-	void renderObjects(sf::RenderWindow& pWindow);
-	void renderHUDs(sf::RenderWindow& pWindow);
+	void update();
+	void render(sf::RenderWindow& pWindow);
 
 private:
-	Player* mPlayer;
+	void setTextUp(sf::Text& pText, const sf::Vector2f& pPos, const std::string& pMsg = "");
 
-	HUD* mHUD;
-	DebugHUD* mDebugHUD;
+	sf::View mView;
+	sf::Font mFont;
 
-	Gamestate mGamestate;
+	// STATE PLAYING
+	sf::Text mScoreP1text;
+	sf::Text mScoreP2text;
+	sf::Text mHiScoreText;
+	sf::Text mLivesText;
+	sf::Text mCreditText;
+
+	sf::Text mScore1;
+	sf::Text mScore2;
+	sf::Text mHiScore;
+
+	sf::RectangleShape mGreenBar;
+	sf::Sprite mLifeSprite1;
+	sf::Sprite mLifeSprite2;
 };
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-#endif // !GameManager_H
+#endif // !HUD_H

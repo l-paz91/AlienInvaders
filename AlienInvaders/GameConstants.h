@@ -25,7 +25,7 @@ namespace GameConstants
 
 	constexpr float TOP_BANNER = 96;
 	constexpr float BOT_BANNER = 51;
-	constexpr float LEFT_EDGE = 30;
+	constexpr float LEFT_EDGE = 27;
 	constexpr float RIGHT_EDGE = WIDTH - LEFT_EDGE;
 }
 

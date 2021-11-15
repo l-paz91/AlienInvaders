@@ -35,7 +35,7 @@ Player::Player()
 	using namespace GameConstants;
 
 	mSprite.setOrigin(20, 0);
-	mSprite.setPosition(HALFW, HEIGHT - BOT_BANNER);
+	mSprite.setPosition(HALFW, 651.0f);
 }
 
 // -----------------------------------------------------------------------------
@@ -48,14 +48,19 @@ void Player::update(const float& pDt)
 	const Vector2f& pos = mSprite.getPosition();
 
 	// ---- HANDLE INPUT ---- //
-	if (Keyboard::isKeyPressed(Keyboard::Left))
+	const bool left = Keyboard::isKeyPressed(Keyboard::Left);
+	const bool a    = Keyboard::isKeyPressed(Keyboard::A);
+	if (left || a)
 	{
 		if (!(pos.x <= LEFT_EDGE))
 		{
 			mSprite.move(-PLAYER_SPEED * pDt, 0);
 		}
 	}
-	if (Keyboard::isKeyPressed(Keyboard::Right))
+
+	const bool right = Keyboard::isKeyPressed(Keyboard::Right);
+	const bool d = Keyboard::isKeyPressed(Keyboard::D);
+	if (right || d)
 	{
 		if (!(pos.x >= RIGHT_EDGE))
 		{
