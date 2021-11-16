@@ -30,7 +30,19 @@ public:
 	const sf::Sprite& getSprite() const { return mSprite; }
 
 private:
+	void setPosForShot();
+
 	sf::Sprite mSprite;
+	sf::Sprite mShotSplatSprite;
+	sf::RectangleShape mShot;
+
+	float mTimeSinceLastDisplayed;
+
+	bool mShotsFired;
+	bool mShotDestroyed;
+	bool mDisplayShotSplat;
+
+	float mElapsedTime;
 };
 
 // -----------------------------------------------------------------------------
