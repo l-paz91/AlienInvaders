@@ -30,10 +30,14 @@ public:
 	const sf::Sprite& getSprite() const { return mSprite; }
 
 private:
+	void move(const float& pDeltaTime);
+	void shoot(const float& pDeltaTime);
+	void loseLife();
+
 	void setPosForShot();
 
 	sf::Sprite mSprite;
-	sf::Sprite mShotSplatSprite;
+	sf::Sprite mShotMissedSprite;
 	sf::RectangleShape mShot;
 
 	float mTimeSinceLastDisplayed;
