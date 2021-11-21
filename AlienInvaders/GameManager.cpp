@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 
+#include "Alien.h"
 #include "DebugHUD.h"
 #include "HUD.h"
 #include "Player.h"
@@ -13,7 +14,8 @@
 // -----------------------------------------------------------------------------
 
 GameManager::GameManager()
-	: mPlayer(new Player())
+	: mAliens(new Alien())
+	, mPlayer(new Player())
 	, mHUD(new HUD())
 	, mDebugHUD(new DebugHUD())
 	, mGamestate(Gamestate::eTITLE)
@@ -25,6 +27,7 @@ GameManager::GameManager()
 
 GameManager::~GameManager()
 {
+	delete mAliens;
 	delete mPlayer;
 	delete mHUD;
 	delete mDebugHUD;
@@ -43,6 +46,7 @@ void GameManager::updateObjects(const float& pDeltaTime)
 	}
 	case Gamestate::ePLAYING:
 	{
+		//mAliens->update(pDeltaTime);
 		mPlayer->update(pDeltaTime);
 		break;
 	}
@@ -70,9 +74,9 @@ void GameManager::updateHUDs()
 	}
 	case Gamestate::ePLAYING:
 	{
-		std::stringstream ss;
-		ss << "Player X: " << mPlayer->getSprite().getPosition().x;
-		mDebugHUD->update(ss);
+		//std::stringstream ss;
+		//ss << "Player X: " << mPlayer->getSprite().getPosition().x;
+		//mDebugHUD->update(ss);
 		break;
 	}
 	case Gamestate::eGAMEOVER:
@@ -98,6 +102,7 @@ void GameManager::renderObjects(sf::RenderWindow& pWindow)
 	}
 	case Gamestate::ePLAYING:
 	{
+		//mAliens->render(pWindow);
 		mPlayer->render(pWindow);
 		break;
 	}

@@ -1,47 +1,58 @@
 // -----------------------------------------------------------------------------
-#ifndef Player_H
-#define Player_H
+#ifndef Alien_H
+#define Alien_H
 // -----------------------------------------------------------------------------
-
-/*
-* 
-*	In the original Space Invaders a player is 13x8 pixels. 
-*	Everything in this game is scaled by 3. This player is 39x24 pixels.
-*	Origin is set in the top middle at (20, 0)
-* 
-*/
 
 //--INCLUDES--//
 #include <SFML/Graphics.hpp>
 
+#include <vector>
+
 // Forward Declares
-class PlayerShootComponent;
+
 
 // -----------------------------------------------------------------------------
 
-class Player
+enum class AlienType
+{
+	eOCTOPUS,	// large invader
+	eCRAB,		// medium invader
+	eSQUID		// small invader
+};
+
+// -----------------------------------------------------------------------------
+
+struct Invader
+{
+	Invader();
+	void animate();
+
+	sf::Sprite mSprite;
+	AlienType mType;
+	bool mDisplay;
+	bool mStep;		// flip between animations
+};
+
+// -----------------------------------------------------------------------------
+
+class Alien
 {
 public:
-	Player();
-	~Player();
+	Alien();
 
+	void init();
 	void update(const float& pDt);				// update logic
 	void render(sf::RenderWindow& pWindow);		// render the sprite to the window
 
-	const sf::Sprite& getSprite() const { return mSprite; }
-
 private:
 	void move(const float& pDeltaTime);
-	void loseLife();
+	void shoot(const float& pDeltaTime);
 
-	sf::Sprite mSprite;
-
-	PlayerShootComponent* mShootComponent;
-
-	float mElapsedTime;
+	std::vector<Invader> mAliens;
+	float mSpeed;
 };
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-#endif // !Player_H
+#endif // !Alien_H

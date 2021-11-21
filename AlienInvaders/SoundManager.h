@@ -20,6 +20,8 @@ enum class SoundEvent
 
 class SoundManager
 {
+	// seeing as how the game only has 4 sounds and the background music I think
+	// having a global static class is fine
 public:
 	SoundManager(const SoundManager&) = delete;
 	void operator=(const SoundManager&) = delete;
@@ -61,7 +63,7 @@ private:
 
 	static SoundManager& getInstance()
 	{
-		static SoundManager instance;	// guaranteed to be destroyed properly
+		static SoundManager instance;
 		return instance;
 	}
 

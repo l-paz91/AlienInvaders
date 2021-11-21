@@ -7,6 +7,7 @@
 #include <SFML/Graphics.hpp>
 
 // Forward Declares
+class Alien;
 class Player;
 class DebugHUD;
 class HUD;
@@ -33,6 +34,7 @@ public:
 	void renderHUDs(sf::RenderWindow& pWindow);
 
 private:
+	Alien* mAliens;
 	Player* mPlayer;
 
 	HUD* mHUD;
