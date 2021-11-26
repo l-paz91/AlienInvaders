@@ -1,6 +1,7 @@
 // -----------------------------------------------------------------------------
 
 //--INCLUDES--//
+#include "Alien.h"
 #include "GameConstants.h"
 #include "SoundManager.h"
 #include "TextureManager.h"

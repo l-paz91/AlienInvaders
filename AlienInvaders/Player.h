@@ -30,15 +30,15 @@ public:
 
 	const sf::Sprite& getSprite() const { return mSprite; }
 
-private:
-	void move(const float& pDeltaTime);
-	void loseLife();
-
 	sf::Sprite mSprite;
 
 	PlayerShootComponent* mShootComponent;
 
 	float mElapsedTime;
+
+private:
+	void move(const float& pDeltaTime);
+	void loseLife();
 };
 
 // -----------------------------------------------------------------------------

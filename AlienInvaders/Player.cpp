@@ -3,14 +3,13 @@
 //--INCLUDES--//
 #include "GameConstants.h"
 #include "PlayerShootComponent.h"
-#include "SoundManager.h"
 #include "TextureManager.h"
+
+#include <string>
 
 // -----------------------------------------------------------------------------
 
 #include "Player.h"
-
-#include "std_lib_facilities.h"
 
 // -----------------------------------------------------------------------------
 
@@ -23,7 +22,7 @@ namespace
 {
 	namespace PlayerPrivate
 	{
-		const string playerTextureFilename = "Graphics/PlayerSprite.png";
+		const std::string playerTextureFilename = "Graphics/PlayerSprite.png";
 		
 		// In SI, the player moves a pixel every screen refresh, so 60 times a second
 		// therefore our player needs to move 3 pixels every second (as the width is 3x larger)

@@ -17,11 +17,13 @@ public:
 	virtual void update(Player& pPlayer, float pDeltaTime);
 	virtual void render(sf::RenderWindow& pWindow);
 
-private:
 	void setPosForShot(const Player& pPlayer);
 
+private:
 	sf::Sprite mSprite;
 	sf::Sprite mShotMissedSprite;
+
+public:
 	sf::RectangleShape mShotRect;
 
 	float mElapsedTime;

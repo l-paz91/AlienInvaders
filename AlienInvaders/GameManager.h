@@ -34,6 +34,8 @@ public:
 	void renderHUDs(sf::RenderWindow& pWindow);
 
 private:
+	void alienHit();
+
 	Alien* mAliens;
 	Player* mPlayer;
 

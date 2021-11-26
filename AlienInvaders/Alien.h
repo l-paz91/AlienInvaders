@@ -29,8 +29,18 @@ struct Invader
 
 	sf::Sprite mSprite;
 	AlienType mType;
-	bool mDisplay;
+	bool mDisplay;	
 	bool mStep;		// flip between animations
+};
+
+// -----------------------------------------------------------------------------
+
+struct DestroyedEvent
+{
+	DestroyedEvent() : mSprite(), mElapsedTime(0.0f) {}
+
+	sf::Sprite mSprite;
+	float mElapsedTime;
 };
 
 // -----------------------------------------------------------------------------
@@ -43,13 +53,18 @@ public:
 	void init();
 	void update(const float& pDt);				// update logic
 	void render(sf::RenderWindow& pWindow);		// render the sprite to the window
+	void alienDestroyedEvent(const Invader& pInvader);
+
+	std::vector<Invader> mAliens;
+	std::vector<DestroyedEvent> mDestroyedSprites;
+
+	float mSpeed;
+	int mAlienToUpdate;
+	int mAliensHit;
 
 private:
 	void move(const float& pDeltaTime);
 	void shoot(const float& pDeltaTime);
-
-	std::vector<Invader> mAliens;
-	float mSpeed;
 };
 
 // -----------------------------------------------------------------------------

@@ -27,6 +27,7 @@ namespace
 		const sf::IntRect destroyed = sf::IntRect(0, 72, 32, 24);
 
 		const int RIGHT_EDGE = 117;
+		const float MAX_DESTROY_DISPLAY = 0.5f;
 	}
 }
 
@@ -76,6 +77,8 @@ void Invader::animate()
 
 Alien::Alien()
 	: mSpeed(6.0f)
+	, mAlienToUpdate(0)
+	, mAliensHit(0)
 {
 	init();
 }
@@ -99,18 +102,21 @@ void Alien::init()
 	for (uint32 i = 0; i < 22; ++i)
 	{
 		mAliens[i].mSprite.setTextureRect(octopus2);
+		//mAliens[i].mSprite.setOrigin(Vector2f(0, 36));
 		mAliens[i].mType = AlienType::eOCTOPUS;
 	}
 
 	for (uint32 i = 22; i < 44; ++i)
 	{
 		mAliens[i].mSprite.setTextureRect(crab2);
+		//mAliens[i].mSprite.setOrigin(Vector2f(0, 32));
 		mAliens[i].mType = AlienType::eCRAB;
 	}
 
 	for (uint32 i = 44; i < 55; ++i)
 	{
 		mAliens[i].mSprite.setTextureRect(squid2);
+		//mAliens[i].mSprite.setOrigin(Vector2f(0, 24));
 		mAliens[i].mType = AlienType::eSQUID;
 	}
 
@@ -133,39 +139,21 @@ void Alien::init()
 
 void Alien::update(const float& pDt)
 {
-	// the aliens move one after another in reference to the bottom left alien
-	// in a wave style pattern, aliens move 2 (therefore 6) pixels each frame
-	// all aliens must have moved in 55 frames (1 each)
-	// this is why the aliens speed up as they are destroyed
-	static int alienToUpdate = 0;
-	Invader& alien = mAliens[alienToUpdate];
+	// update the invaders movement
+	move(pDt);
 
-	// check to see if ref alien has hit an edge
-	if (alienToUpdate == 0)
+	// update the invaders shooting
+
+	// update any destroyed sprites (they should only display for half a second)
+	// we go backwards to prevent out of range errors
+	for (int i = mDestroyedSprites.size()-1; i >= 0; --i)
 	{
-		const float x = alien.mSprite.getPosition().x;
-		if (x < GameConstants::LEFT_EDGE || x > AlienPrivate::RIGHT_EDGE)
+		mDestroyedSprites[i].mElapsedTime += pDt;
+		if (mDestroyedSprites[i].mElapsedTime > AlienPrivate::MAX_DESTROY_DISPLAY)
 		{
-			// drop the aliens by 1 row
-			for (Invader& i : mAliens)
-			{
-				i.mSprite.move(Vector2f(0, 48));
-			}
-
-			// set reverse speed
-			mSpeed *= -1.0f;
+			// remove from vector
+			mDestroyedSprites.erase(mDestroyedSprites.begin() + i);
 		}
-	}
-
-	// move it over
-	alien.mSprite.move(Vector2f(mSpeed, 0));
-	alien.mStep = !alien.mStep;
-	alien.animate();
-	
-	++alienToUpdate;
-	if (alienToUpdate == mAliens.size())
-	{
-		alienToUpdate = 0;
 	}
 }
 
@@ -173,11 +161,84 @@ void Alien::update(const float& pDt)
 
 void Alien::render(sf::RenderWindow& pWindow)
 {
+	// render invaders
 	for (const Invader& i : mAliens)
 	{
 		if (i.mDisplay)
 		{
 			pWindow.draw(i.mSprite);
+		}
+	}
+
+	// render invader destroyed sprite
+	for (const DestroyedEvent& d : mDestroyedSprites)
+	{
+		pWindow.draw(d.mSprite);
+	}
+}
+
+// -----------------------------------------------------------------------------
+
+void Alien::alienDestroyedEvent(const Invader& pInvader)
+{
+	DestroyedEvent destroyed;
+	destroyed.mSprite = sf::Sprite(TextureManager::getTexture(AlienPrivate::alienSpritesheet));
+
+	destroyed.mSprite.setTextureRect(AlienPrivate::destroyed);
+	destroyed.mSprite.setPosition(pInvader.mSprite.getPosition());
+
+	// push back a new destroyed sprite
+	mDestroyedSprites.push_back(destroyed);
+}
+
+// -----------------------------------------------------------------------------
+
+void Alien::move(const float& pDeltaTime)
+{
+	// the aliens move one after another in reference to the bottom left alien
+	// in a wave style pattern, aliens move 2 (therefore 6) pixels each frame
+	// all aliens must have moved in 55 frames (1 each)
+	// this is why the aliens speed up as they are destroyed
+
+	// skip updating aliens that have been destroyed
+	while (!mAliens[mAlienToUpdate].mDisplay && mAliensHit < 55)
+	{
+		++mAlienToUpdate;
+		if (mAlienToUpdate == mAliens.size())
+		{
+			mAlienToUpdate = 0;
+		}
+	}
+
+	Invader& alien = mAliens[mAlienToUpdate];
+
+	// move it over
+	alien.mSprite.move(Vector2f(mSpeed, 0));
+	alien.mStep = !alien.mStep;
+	alien.animate();
+
+	// check to see if an alien has hit an edge
+	const float x = alien.mSprite.getPosition().x;
+	if (x <= GameConstants::LEFT_EDGE || x >= GameConstants::RIGHT_EDGE - 36)
+	{
+		// drop the aliens by 1 row
+		for (Invader& i : mAliens)
+		{
+			//i.mSprite.move(Vector2f(0, 48));
+		}
+
+		// set reverse speed
+		mSpeed *= -1.0f;
+
+		// go back to start of aliens
+		mAlienToUpdate = 0;
+	}
+	else
+	{
+		++mAlienToUpdate;
+		if (mAlienToUpdate == mAliens.size())
+		{
+			mAlienToUpdate = 0;
 		}
 	}
 }

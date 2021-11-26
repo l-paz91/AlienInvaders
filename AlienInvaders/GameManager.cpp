@@ -8,6 +8,7 @@
 #include "DebugHUD.h"
 #include "HUD.h"
 #include "Player.h"
+#include "PlayerShootComponent.h"
 
 #include "GameManager.h"
 
@@ -46,8 +47,11 @@ void GameManager::updateObjects(const float& pDeltaTime)
 	}
 	case Gamestate::ePLAYING:
 	{
-		//mAliens->update(pDeltaTime);
+		mAliens->update(pDeltaTime);
 		mPlayer->update(pDeltaTime);
+
+		// check for collisions and send events out
+		alienHit();
 		break;
 	}
 	case Gamestate::eGAMEOVER:
@@ -102,7 +106,7 @@ void GameManager::renderObjects(sf::RenderWindow& pWindow)
 	}
 	case Gamestate::ePLAYING:
 	{
-		//mAliens->render(pWindow);
+		mAliens->render(pWindow);
 		mPlayer->render(pWindow);
 		break;
 	}
@@ -141,6 +145,35 @@ void GameManager::renderHUDs(sf::RenderWindow& pWindow)
 		std::cout << "How did we get here? (GameManager::renderHUDs switch default)" << std::endl;
 		break;
 	}
+}
+
+// -----------------------------------------------------------------------------
+
+void GameManager::alienHit()
+{
+	for (Invader& i : mAliens->mAliens)
+	{
+		// ignore the collision if the alien has already been destroyed
+		// we don't remove sprites from the vector - just hide them
+		if (i.mDisplay && mPlayer->mShootComponent->mShotRect.getGlobalBounds().intersects(i.mSprite.getGlobalBounds()))
+		{
+			// alien hit, hide it and display destroyed sprite
+			i.mDisplay = false;
+			++mAliens->mAliensHit;
+			mAliens->alienDestroyedEvent(i);
+
+			// move the shot out of the way so it doesn't collide with other invaders
+			mPlayer->mShootComponent->setPosForShot(*mPlayer);
+
+			// remove the shot from the screen
+			mPlayer->mShootComponent->mShotDestroyed = true;
+			mPlayer->mShootComponent->mShotsFired = false;
+			mPlayer->mShootComponent->mShotRect.setFillColor(sf::Color(82, 252, 82));
+			return;
+		}
+	}
+
+	return;
 }
 
 // -----------------------------------------------------------------------------
