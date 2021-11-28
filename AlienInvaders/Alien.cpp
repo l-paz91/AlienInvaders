@@ -1,7 +1,9 @@
 // -----------------------------------------------------------------------------
 
 //--INCLUDES--//
+#include "AlienShootComponent.h"
 #include "GameConstants.h"
+#include "SoundManager.h"
 #include "TextureManager.h"
 
 #include "Alien.h"
@@ -76,11 +78,19 @@ void Invader::animate()
 // -----------------------------------------------------------------------------
 
 Alien::Alien()
-	: mSpeed(6.0f)
+	: mShootComponent(new AlienShootComponent())
+	, mSpeed(6.0f)
 	, mAlienToUpdate(0)
 	, mAliensHit(0)
 {
 	init();
+}
+
+// -----------------------------------------------------------------------------
+
+Alien::~Alien()
+{
+	delete mShootComponent;
 }
 
 // -----------------------------------------------------------------------------
@@ -142,8 +152,6 @@ void Alien::update(const float& pDt)
 	// update the invaders movement
 	move(pDt);
 
-	// update the invaders shooting
-
 	// update any destroyed sprites (they should only display for half a second)
 	// we go backwards to prevent out of range errors
 	for (int i = mDestroyedSprites.size()-1; i >= 0; --i)
@@ -175,6 +183,9 @@ void Alien::render(sf::RenderWindow& pWindow)
 	{
 		pWindow.draw(d.mSprite);
 	}
+
+	// render any alien shots
+	mShootComponent->render(pWindow);
 }
 
 // -----------------------------------------------------------------------------
@@ -189,6 +200,9 @@ void Alien::alienDestroyedEvent(const Invader& pInvader)
 
 	// push back a new destroyed sprite
 	mDestroyedSprites.push_back(destroyed);
+
+	// play destroyed sound
+	SoundManager::playSound(SoundEvent::eALIEN_HIT);
 }
 
 // -----------------------------------------------------------------------------
@@ -212,6 +226,9 @@ void Alien::move(const float& pDeltaTime)
 
 	Invader& alien = mAliens[mAlienToUpdate];
 
+	// allow the invader a chance to shoot
+	mShootComponent->update(mAliens[mAlienToUpdate], pDeltaTime);
+
 	// move it over
 	alien.mSprite.move(Vector2f(mSpeed, 0));
 	alien.mStep = !alien.mStep;
@@ -224,14 +241,14 @@ void Alien::move(const float& pDeltaTime)
 		// drop the aliens by 1 row
 		for (Invader& i : mAliens)
 		{
-			//i.mSprite.move(Vector2f(0, 48));
+			i.mSprite.move(Vector2f(0, 24));
 		}
 
 		// set reverse speed
 		mSpeed *= -1.0f;
 
 		// go back to start of aliens
-		mAlienToUpdate = 0;
+		//mAlienToUpdate = 0;
 	}
 	else
 	{

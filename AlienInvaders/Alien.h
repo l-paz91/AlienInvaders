@@ -9,7 +9,7 @@
 #include <vector>
 
 // Forward Declares
-
+class AlienShootComponent;
 
 // -----------------------------------------------------------------------------
 
@@ -49,6 +49,7 @@ class Alien
 {
 public:
 	Alien();
+	~Alien();
 
 	void init();
 	void update(const float& pDt);				// update logic
@@ -57,6 +58,8 @@ public:
 
 	std::vector<Invader> mAliens;
 	std::vector<DestroyedEvent> mDestroyedSprites;
+
+	AlienShootComponent* mShootComponent;
 
 	float mSpeed;
 	int mAlienToUpdate;
